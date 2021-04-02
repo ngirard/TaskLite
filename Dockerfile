@@ -1,6 +1,6 @@
 FROM haskell:8.8.4-buster as builder
 
-WORKDIR tasklite
+WORKDIR /usr/src/tasklite
 
 COPY docker-stack.yaml stack.yaml
 
@@ -24,6 +24,6 @@ RUN stack install
 FROM debian:buster
 RUN apt-get update && \
     apt-get install -y libgmp10
-COPY --from=builder /tasklite/tasklite-core/example-config.yaml /root/.config/tasklite/config.yaml
+COPY --from=builder /usr/src/tasklite/tasklite-core/example-config.yaml /root/.config/tasklite/config.yaml
 COPY --from=builder /root/.local/bin/tasklite /usr/local/bin/tasklite
 CMD ["tasklite"]
