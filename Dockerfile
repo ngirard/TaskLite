@@ -28,4 +28,4 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /usr/src/tasklite/tasklite-core/example-config.yaml /root/.config/tasklite/config.yaml
 COPY --from=builder /root/.local/bin/tasklite /usr/local/bin/tasklite
-CMD ["tasklite"]
+ENTRYPOINT ["tasklite"]
