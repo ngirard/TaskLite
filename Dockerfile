@@ -21,7 +21,7 @@ RUN stack install
 
 
 FROM alpine:3.13.4
-RUN apk --no-cache add libgmp10=6.2.1-r0
+RUN apk --no-cache add gmp=6.2.1-r0
 COPY --from=builder /usr/src/tasklite/tasklite-core/example-config.yaml /root/.config/tasklite/config.yaml
 COPY --from=builder /root/.local/bin/tasklite /usr/local/bin/tasklite
 ENTRYPOINT ["tasklite"]
