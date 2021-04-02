@@ -23,7 +23,7 @@ RUN stack install
 # Same OS version as the builder image
 FROM debian:buster
 RUN apt-get update \
-    && apt-get install -y libgmp10 \
+    && apt-get install -y --no-install-recommends libgmp10 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /usr/src/tasklite/tasklite-core/example-config.yaml /root/.config/tasklite/config.yaml
