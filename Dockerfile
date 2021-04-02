@@ -1,29 +1,29 @@
-from haskell:8.8.4-buster as builder
+FROM haskell:8.8.4-buster as builder
 
-workdir tasklite
+WORKDIR tasklite
 
-copy docker-stack.yaml stack.yaml
+COPY docker-stack.yaml stack.yaml
 
-copy tasklite-core/README.md tasklite-core/README.md
-copy tasklite-core/example-config.yaml tasklite-core/example-config.yaml
-copy tasklite-core/package.yaml tasklite-core/package.yaml
+COPY tasklite-core/README.md tasklite-core/README.md
+COPY tasklite-core/example-config.yaml tasklite-core/example-config.yaml
+COPY tasklite-core/package.yaml tasklite-core/package.yaml
 
-copy huzzy huzzy
+COPY huzzy huzzy
 
-run stack install --only-dependencies tasklite-core
+RUN stack install --only-dependencies tasklite-core
 
-copy tasklite-core tasklite-core
+COPY tasklite-core tasklite-core
 
 # Needed for retrieving the version number
-copy .git .git
+COPY .git .git
 
-run stack install
+RUN stack install
 
 
 # Same OS version as the builder image
-from debian:buster
-run apt-get update && \
+FROM debian:buster
+RUN apt-get update && \
     apt-get install -y libgmp10
-copy --from=builder /tasklite/tasklite-core/example-config.yaml /root/.config/tasklite/config.yaml
-copy --from=builder /root/.local/bin/tasklite /usr/local/bin/tasklite
-cmd ["tasklite"]
+COPY --from=builder /tasklite/tasklite-core/example-config.yaml /root/.config/tasklite/config.yaml
+COPY --from=builder /root/.local/bin/tasklite /usr/local/bin/tasklite
+CMD ["tasklite"]
