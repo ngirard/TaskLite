@@ -1,80 +1,8 @@
 name: Haskell Stack CI
 
-on: [push]
+on: [workflow_dispatch]
 
 jobs:
-  linux:
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Cache .stack-work
-        uses: actions/cache@v2
-        with:
-          path: .stack-work
-          key: tasklite_stack-work_ubuntu
-          restore-keys: tasklite_stack-work_ubuntu
-
-      - name: Setup Stack
-        uses: actions/setup-haskell@v1.1
-        with:
-          enable-stack: true
-          stack-no-global: true
-
-      - name: Install TaskLite CLI tool
-        run: stack install tasklite-core
-
-      - name: Run test suite
-        run: stack test
-
-      - name: Test adding of tasks
-        run: /home/runner/.local/bin/tasklite add Buy milk
-
-      - name: Test listing of tasks
-        run: /home/runner/.local/bin/tasklite
-
-      - name: Upload Linux Release
-        uses: actions/upload-artifact@v1
-        with:
-          path: /home/runner/.local/bin/tasklite
-          name: tasklite_linux_x86_64.zip
-
-  macos:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Cache .stack-work
-        uses: actions/cache@v2
-        with:
-          path: .stack-work
-          key: tasklite_stack-work_macos
-          restore-keys: tasklite_stack-work_macos
-
-      - name: Setup Stack
-        uses: actions/setup-haskell@v1.1
-        with:
-          enable-stack: true
-          stack-no-global: true
-
-      - name: Install TaskLite CLI tool
-        run: stack install tasklite-core
-
-      - name: Run test suite
-        run: stack test
-
-      - name: Test adding of tasks
-        run: /Users/runner/.local/bin/tasklite add Buy milk
-
-      - name: Test listing of tasks
-        run: /Users/runner/.local/bin/tasklite
-
-      - name: Upload MacOS Release
-        uses: actions/upload-artifact@v1
-        with:
-          path: /Users/runner/.local/bin/tasklite
-          name: tasklite_macos_x86_64.zip
-
   docker:
     runs-on: ubuntu-18.04
     steps:
